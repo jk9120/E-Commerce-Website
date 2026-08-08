@@ -1,162 +1,275 @@
-let icon = document.querySelector(".icon");
-let ul = document.querySelector("ul");
 
 
+const icon = document.querySelector(".icon");
+const navList = document.querySelector("nav ul");
+const bar = document.getElementById("bar");
 
-icon.addEventListener("click",()=>{
-    ul.classList.toggle("showData");
-    if(ul.className =="showData"){
-        document.getElementById("bar").className="fa-solid fa-xmark";
-    }else{
-        document.getElementById("bar").className="fa-solid fa-bars";
-    }
-});
+if (icon && navList && bar) {
 
-//navbar
-let shops = document.getElementById("shops");
-let reviews = document.getElementById("reviews");
-let blogs = document.getElementById("blogs");
-let contacts = document.getElementById("contacts");
+    icon.addEventListener("click", () => {
 
+        navList.classList.toggle("showData");
 
-
-shops.addEventListener("click",()=>{
-    shops.style.color="rgb(4,219,219)";
-    reviews.style.color="white";
-    blogs.style.color="white";
-    contacts.style.color="white";
-})
-
-
-reviews.addEventListener("click",()=>{
-    reviews.style.color="rgb(4,219,219)";
-    shops.style.color="white";
-    blogs.style.color="white";
-    contacts.style.color="white";
-})
-
-
-
-blogs.addEventListener("click",()=>{
-    blogs.style.color="rgb(4,219,219)";
-    reviews.style.color="white";
-    shops.style.color="white";
-    contacts.style.color="white";
-})
-
-
-contacts.addEventListener("click",()=>{
-    contacts.style.color="rgb(4,219,219)";
-    reviews.style.color="white";
-    blogs.style.color="white";
-    shops.style.color="white";
-})
-
-// card js
-
-let crd = document.querySelectorAll(".crd");
-let itemPage = document.querySelector(".itemPage");
-let container = document.querySelector(".container");
-let itemImg = document.getElementById("itemImg");
-let buyBtn = document.getElementById("buyBtn");
-console.log(crd);
-
-
-    crd.forEach(function(curvalue){
-        curvalue.addEventListener("click",function(){
-            itemPage.style.display="flex";
-            container.style.display="none";
-
-
-
-            let imgSrc = curvalue.firstElementChild.src ;
-            itemImg.src=imgSrc;
-
-
-
-            buyBtn.addEventListener("click",function(){
-                document.querySelector(".buyPage").style.display="block";
-
-
-
-                document.querySelector(".buyText").innerHTML=`
-                <h3>Enter Details:</h3>
-        <input type="text" placeholder="Enter Your Name" id="name"><br/>
-
-        <input type="text" placeholder="Enter Your Address" id="address"><br/>
-
-        <input type="text" placeholder="Enter Your Mobile Number" id="number"><br/>
-
-        <h3>Payment Option</h3>
-        <select>
-            <option value="Google-Pay">Google-Pay</option>
-            <option value="Phone-Pay">Phone-Pay</option>
-            <option value="Bharat-Pay">Bharat-Pay</option>
-            <option value="Cash-On-Delivery">Cash-On-Delivery</option>
-        </select><br/>
-
-
-        `
-        let buyText = document.querySelector(".buyText");
-
-        let button = document.createElement("button");
-        button.innerText="Submit";
-        
-
-        buyText.appendChild(button);
-
-
-
-
-        button.addEventListener("click", function(){
-            
-
-        let name = document.getElementById("name");
-        let address = document.getElementById("address");
-        let number = document.getElementById("number");
-
-        
-        
-        if(name.value == "" && address.value == "" && number.value ==""){
-            alert("Please Enter Details")
-        }else{
-            alert("Your Response Recorded")
-
-
-            document.querySelector(".buyPage").style.display="none";
+        if (navList.classList.contains("showData")) {
+            bar.className = "fa-solid fa-xmark";
+        } else {
+            bar.className = "fa-solid fa-bars";
         }
 
-        })
+    });
+}
 
 
 
 
+const navLinks = document.querySelectorAll("nav ul li a");
 
-        let cross = document.querySelector(".cross");
-        cross.addEventListener("click",function(){
-            document.querySelector(".buyPage").style.display="none";
-        })
+navLinks.forEach((link) => {
+
+    link.addEventListener("click", () => {
+
+        navLinks.forEach((item) => {
+            item.classList.remove("active");
+        });
+
+        link.classList.add("active");
+
+        
+        if (window.innerWidth <= 600) {
+
+            navList.classList.remove("showData");
+
+            bar.className = "fa-solid fa-bars";
+        }
+
+    });
+
+});
+
+
+const cards = document.querySelectorAll(".crd");
+const itemPage = document.querySelector(".itemPage");
+const container = document.querySelector(".container");
+const itemImg = document.getElementById("itemImg");
+const buyBtn = document.getElementById("buyBtn");
+
+const buyPage = document.querySelector(".buyPage");
+const buyText = document.querySelector(".buyText");
+const cross = document.querySelector(".cross");
+
+
+
+cards.forEach((card) => {
+
+    card.addEventListener("click", () => {
+
+        const image = card.querySelector("img");
+
+        if (!image) return;
+
+        if (itemPage) {
+            itemPage.style.display = "flex";
+        }
+
+        if (container) {
+            container.style.display = "none";
+        }
+
+        if (itemImg) {
+            itemImg.src = image.src;
+            itemImg.alt = image.alt || "Product Image";
+        }
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+
+    });
+
+});
+
+
+
+if (buyBtn) {
+
+    buyBtn.addEventListener("click", () => {
+
+        if (!buyPage || !buyText) return;
+
+        buyPage.style.display = "block";
+
+        buyText.innerHTML = `
+            <h3>Enter Details:</h3>
+
+            <input
+                type="text"
+                placeholder="Enter Your Name"
+                id="customerName"
+            >
+
+            <input
+                type="text"
+                placeholder="Enter Your Address"
+                id="customerAddress"
+            >
+
+            <input
+                type="tel"
+                placeholder="Enter Your Mobile Number"
+                id="customerNumber"
+                maxlength="10"
+            >
+
+            <h3>Payment Option</h3>
+
+            <select id="paymentOption">
+                <option value="">Select Payment Method</option>
+                <option value="Google-Pay">Google Pay</option>
+                <option value="Phone-Pay">PhonePe</option>
+                <option value="Bharat-Pay">Bharat Pay</option>
+                <option value="Cash-On-Delivery">
+                    Cash On Delivery
+                </option>
+            </select>
+
+            <button id="submitOrder">
+                Submit
+            </button>
+        `;
+
+        const submitOrder =
+            document.getElementById("submitOrder");
+
+        submitOrder.addEventListener("click", () => {
+
+            const name =
+                document.getElementById("customerName");
+
+            const address =
+                document.getElementById("customerAddress");
+
+            const number =
+                document.getElementById("customerNumber");
+
+            const payment =
+                document.getElementById("paymentOption");
+
+
+
+            if (
+                name.value.trim() === "" ||
+                address.value.trim() === "" ||
+                number.value.trim() === "" ||
+                payment.value === ""
+            ) {
+
+                alert("Please enter all details.");
+
+                return;
+            }
+
+
+
+            if (!/^[0-9]{10}$/.test(number.value.trim())) {
+
+                alert(
+                    "Please enter a valid 10-digit mobile number."
+                );
+
+                return;
+            }
 
 
     
-                
-            })
-        })
 
-    })
+            alert(
+                "Your order response has been recorded successfully!"
+            );
+
+            buyPage.style.display = "none";
+
+        });
+
+    });
+
+}
+
+if (cross) {
+
+    cross.addEventListener("click", () => {
+
+        buyPage.style.display = "none";
+
+    });
+
+}
 
 
 
+document.addEventListener("keydown", (event) => {
 
-    //connect
+    if (event.key === "Escape" && buyPage) {
 
+        buyPage.style.display = "none";
 
-    function connect(){
-        let names = document.getElementById("names");
-        let number = document.getElementById("number");
-        if(name.value =="" && number.value ==""){
-            alert("Fill Details")
-        }else{
-            alert("Thanks For Connecting")
-        }
     }
+
+});
+
+
+function connect() {
+
+    const names =
+        document.getElementById("names");
+
+    const number =
+        document.getElementById("number");
+
+
+    if (!names || !number) return;
+
+
+    if (
+        names.value.trim() === "" ||
+        number.value.trim() === ""
+    ) {
+
+        alert("Please fill all details.");
+
+        return;
+    }
+
+
+    if (!/^[0-9]{10}$/.test(number.value.trim())) {
+
+        alert("Please enter a valid 10-digit number.");
+
+        return;
+    }
+
+
+    alert("Thanks For Connecting!");
+
+    names.value = "";
+    number.value = "";
+}
+
+
+
+const backBtn = document.getElementById("backBtn");
+
+if (backBtn) {
+    backBtn.addEventListener("click", (event) => {
+        event.preventDefault();
+
+        itemPage.style.display = "none";
+        container.style.display = "block";
+
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
+    });
+}
+
